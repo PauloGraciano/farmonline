@@ -1,6 +1,7 @@
 package br.com.farmonline.web;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -90,33 +91,67 @@ public class UsuarioBean implements Serializable {
 		String email = this.usuario.getEmail();
 		String senha = this.usuario.getSenha();
 		String cpf = this.usuario.getCpf();
-		Usuario usuarioBuscado = usuarioRN.buscarPorEmail(email);
-		if (this.confirmarTermos == false) {
-			FacesMessage facesMessage = new FacesMessage(
-					this.usuario.getNome() + " Para prosseguir, aceite os termos " + this.confirmarTermos);
-			context.addMessage(null, facesMessage);
-			this.destinoSalvar = null;
-		} else {
-			context = FacesContext.getCurrentInstance();
-			if (this.confirmarSenha.equalsIgnoreCase(this.usuario.getSenha())) {
-				FacesMessage facesMessage = new FacesMessage("Senha confirmada incorretamente");
+		Usuario usuarioLogin_1 = new Usuario();
+		Usuario usuarioLogin_2 = new Usuario();
+
+		usuarioLogin_1 = usuarioRN.buscarPorCPF(cpf);
+		usuarioLogin_2 = usuarioRN.buscarPorEmail(email);
+		
+		if(((usuarioLogin_1.getCodigo()==0||usuarioLogin_1.getCodigo()==null)&&(usuarioLogin_2.getCodigo()==0||usuarioLogin_2.getCep()==null))
+				||(usuarioLogin_1.getCpf()==usuarioLogin_2.getCpf()&&usuarioLogin_1.getEmail()==usuarioLogin_2.getEmail()
+				&&usuarioLogin_1.getCodigo()==usuarioLogin_2.getCodigo())){
+		
+			if (this.confirmarTermos == false) {
+				FacesMessage facesMessage = new FacesMessage(
+						this.usuario.getNome() + " Para prosseguir, aceite os termos " + this.confirmarTermos);
 				context.addMessage(null, facesMessage);
 				this.destinoSalvar = null;
 			} else {
+				context = FacesContext.getCurrentInstance();
+				if (this.confirmarSenha.equalsIgnoreCase(this.usuario.getSenha())) {
+					FacesMessage facesMessage = new FacesMessage("Senha confirmada incorretamente");
+					context.addMessage(null, facesMessage);
+					this.destinoSalvar = null;
+				} else {
 
-				if (this.usuario.getEmail().equals(usuarioRN.buscarPorEmail(this.usuario.getEmail()))
-						&& (this.usuario.getSenha().equals(usuarioRN.buscarPorEmail(this.usuario.getSenha())))) {
+					if (this.usuario.getEmail().equals(usuarioRN.buscarPorEmail(this.usuario.getEmail()))
+							&& (this.usuario.getSenha().equals(usuarioRN.buscarPorEmail(this.usuario.getSenha())))) {
 
-					this.usuario = usuarioRN.buscarPorEmail(email);
-					this.destinoSalvar = "/login";
+						this.usuario = usuarioRN.buscarPorEmail(email);
+						this.destinoSalvar = "/login";
+					}
 				}
+
+				this.destinoSalvar = "/login";
+
+				usuarioRN.salvar(this.usuario);
+				
 			}
-
-			this.destinoSalvar = "/login";
-
-			usuarioRN.salvar(this.usuario);
+				
+		}else{
+			context = FacesContext.getCurrentInstance();
+			
+				FacesMessage facesMessage = new FacesMessage("Esse e-Mail ou CPf já está sendo utilizado por outro usuáro!");
+				context.addMessage(null, facesMessage);
+				this.destinoSalvar = null;
 		}
+				
+			
+			
+			
+		
+			
+		
 		return this.destinoSalvar;
+	}
+	
+	
+	public String atualizar(){
+		UsuarioRN usuarioRN = new UsuarioRN();
+		usuarioRN.salvar(this.usuario);
+		
+		return null;
+		
 	}
 
 	@Override
