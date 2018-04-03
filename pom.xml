@@ -70,6 +70,40 @@
 			<version>5.1.30</version>
 		</dependency>
 		
+		<dependency>
+        	<groupId>se.walkercrou</groupId>
+        	<artifactId>google-places-api-java</artifactId>
+        	<version>2.1.2</version>
+    	</dependency>	
+    	<dependency>
+    		<groupId>org.json</groupId>
+   			<artifactId>json</artifactId>
+    		<version>20180130</version>
+		</dependency> 
+		<dependency>
+    		<groupId>com.google.maps</groupId>
+    		<artifactId>google-maps-services</artifactId>
+    		<version>0.2.6</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.slf4j</groupId>
+    		<artifactId>slf4j-nop</artifactId>
+    		<version>1.7.25</version>
+		</dependency> 
+		
+		<dependency>
+  			<groupId>junit</groupId>
+  			<artifactId>junit</artifactId>
+  			<version>4.12</version>
+  		</dependency> 		
+  		
+  		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
+		<dependency>
+    		<groupId>org.apache.httpcomponents</groupId>
+    		<artifactId>httpcore</artifactId>
+    		<version>4.4.9</version>
+		</dependency>
+		
 	</dependencies>
 	
 </project>
